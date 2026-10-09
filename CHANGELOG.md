@@ -7,6 +7,11 @@ developers to maintain and readjust their custom modifications on the main proje
 
 ### Added
 
+- Booking wizard: explicit loading, empty and server-error states for the available appointment
+  hours, with an accessible live region (`aria-busy`, `aria-live`) and `aria-pressed` time slots
+- Booking wizard accessibility: step indicator exposed as a labelled list with `aria-current`,
+  required fields marked `aria-required`, invalid fields marked `aria-invalid` with focus moved to
+  the first offending field
 - Add a selectable "premium" theme (`assets/css/themes/premium.scss`): calm, high-end look with
   navy typography, restrained turquoise accents, fine borders and soft shadows, design tokens
   exposed as CSS custom properties, visible keyboard focus and reduced-motion support
@@ -15,6 +20,9 @@ developers to maintain and readjust their custom modifications on the main proje
 
 ### Fixed
 
+- Booking wizard: show the customer-form validation message (the `#form-message` element it targeted
+  did not exist, so required-field/validation errors were silently dropped) and a visible error when
+  the appointment submission fails on the server
 - Fix the public booking endpoint so it can no longer update an arbitrary appointment or customer
   record by sending its numeric id; updates now require the secret appointment hash (IDOR)
 - Prevent double bookings under concurrent requests by serializing the final availability check and

@@ -151,6 +151,9 @@
             </div>
 
         </div>
+
+        <div id="form-message" class="alert alert-danger d-none mx-auto mt-3" role="alert"
+             style="max-width: 630px;"></div>
     </div>
 
     <div class="command-buttons text-center my-3 mx-auto d-md-flex justify-content-md-between">

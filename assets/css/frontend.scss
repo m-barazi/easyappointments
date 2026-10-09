@@ -58,6 +58,33 @@
     color: var(--bs-white) !important;
 }
 
+/* Available-hours loading / empty / error states */
+#book-appointment-wizard #available-hours .available-hours-state {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+}
+
+/* Keep the time column from overflowing narrow screens */
+#book-appointment-wizard #select-time {
+    width: 100%;
+}
+
+/* Inline validation / server-error feedback blocks */
+#book-appointment-wizard #form-message,
+#book-appointment-wizard #register-message {
+    font-size: 0.9375rem;
+}
+
+/* Prevent accidental horizontal scrolling on small screens */
+#book-appointment-wizard {
+    max-width: 100%;
+}
+
+#book-appointment-wizard .frame-content {
+    margin-right: 0;
+    margin-left: 0;
+}
+
 /* Captcha refresh icon hover effect */
 #book-appointment-wizard .captcha-title .fa-sync-alt {
     cursor: pointer;

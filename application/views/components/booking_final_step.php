@@ -80,6 +80,9 @@
 
     </div>
 
+    <div id="register-message" class="alert alert-danger d-none mx-auto mt-3" role="alert"
+         style="max-width: 630px;"></div>
+
     <div class="command-buttons text-center my-3 mx-auto d-md-flex justify-content-md-between">
         <button type="button" id="button-back-4" class="btn button-back btn-outline-secondary" style="min-width: 120px; margin-right: 10px;"
                 data-step_index="4">
