@@ -7,6 +7,11 @@ developers to maintain and readjust their custom modifications on the main proje
 
 ### Added
 
+- Admin dashboard polish: the record-management pages (customers, services, providers, …) now use
+  surface cards for the list and detail panes, card-like list rows with a clear hover state and a
+  prominent selected state (teal tint plus a left accent bar, so selection is not conveyed by colour
+  alone), styled empty states, and keyboard focus outlines; the customer "appointments" panel is no
+  longer capped at 330px, and the pages are checked for no horizontal overflow on small screens
 - Booking wizard: explicit loading, empty and server-error states for the available appointment
   hours, with an accessible live region (`aria-busy`, `aria-live`) and `aria-pressed` time slots
 - Booking wizard accessibility: step indicator exposed as a labelled list with `aria-current`,
