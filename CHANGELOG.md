@@ -5,6 +5,14 @@ developers to maintain and readjust their custom modifications on the main proje
 
 ## [Unreleased]
 
+### Added
+
+- Add a selectable "premium" theme (`assets/css/themes/premium.scss`): calm, high-end look with
+  navy typography, restrained turquoise accents, fine borders and soft shadows, design tokens
+  exposed as CSS custom properties, visible keyboard focus and reduced-motion support
+- Bundle the Inter font locally (SIL Open Font License) for the premium theme instead of loading it
+  from a third-party font CDN
+
 ### Fixed
 
 - Fix the public booking endpoint so it can no longer update an arbitrary appointment or customer
