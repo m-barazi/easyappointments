@@ -3,6 +3,20 @@
 This file contains the code changes that were introduced into each release (starting from v1.1.0) so that is easy for 
 developers to maintain and readjust their custom modifications on the main project codebase.
 
+## [Unreleased]
+
+### Fixed
+
+- Fix the public booking endpoint so it can no longer update an arbitrary appointment or customer
+  record by sending its numeric id; updates now require the secret appointment hash (IDOR)
+- Prevent double bookings under concurrent requests by serializing the final availability check and
+  insert per provider with a MySQL advisory lock
+
+### Changed
+
+- Repair the asset build pipeline (replace the removed `del.sync` API; use `gulp-terser` for JS
+  minification instead of the Babel 8 incompatible `babel-preset-minify`)
+
 ## [1.6.0] - 2026-05-27
 
 ### Added

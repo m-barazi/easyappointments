@@ -835,6 +835,9 @@ App.Pages.Booking = (function () {
         data.manage_mode = Number(manageMode);
 
         if (manageMode) {
+            // The secret appointment hash is what authorizes an update on the server side; the ids
+            // are kept for backwards compatibility but are re-derived from the hash server-side.
+            data.appointment.hash = vars('appointment_data').hash;
             data.appointment.id = vars('appointment_data').id;
             data.customer.id = vars('customer_data').id;
         }

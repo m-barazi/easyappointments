@@ -392,7 +392,24 @@ class Booking extends EA_Controller
             $captcha = request('captcha');
             $appointment = $post_data['appointment'] ?? [];
             $customer = $post_data['customer'] ?? [];
-            $manage_mode = filter_var($post_data['manage_mode'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+            // Derive "manage mode" from the secret appointment hash on the server side, never from
+            // a client-supplied flag or record id. Without a hash that resolves to an existing
+            // appointment this is treated as a brand-new booking, so a caller cannot update an
+            // arbitrary appointment/customer just by sending its numeric id (see docs/TECHNICAL-AUDIT.md R1).
+            $submitted_hash = is_array($appointment) ? ($appointment['hash'] ?? null) : null;
+
+            $existing_appointment = null;
+
+            if (!empty($submitted_hash) && is_string($submitted_hash)) {
+                $matching_appointments = $this->appointments_model->get(['hash' => $submitted_hash]);
+
+                if (!empty($matching_appointments)) {
+                    $existing_appointment = $matching_appointments[0];
+                }
+            }
+
+            $manage_mode = $existing_appointment !== null;
 
             // Validate required appointment fields
             if (empty($appointment) || !is_array($appointment)) {
@@ -414,6 +431,16 @@ class Booking extends EA_Controller
 
             // Sanitize appointment fields - only allow expected fields
             $appointment = array_intersect_key($appointment, array_flip($this->allowed_appointment_fields));
+
+            // Enforce the record ids on the server side. In manage mode they come from the
+            // hash-matched appointment, otherwise any client-supplied ids are dropped so that the
+            // records are always inserted as new ones (prevents the IDOR described in R1).
+            if ($manage_mode) {
+                $appointment['id'] = $existing_appointment['id'];
+                $customer['id'] = $existing_appointment['id_users_customer'];
+            } else {
+                unset($appointment['id'], $customer['id']);
+            }
 
             if (!array_key_exists('address', $customer)) {
                 $customer['address'] = '';
@@ -479,7 +506,11 @@ class Booking extends EA_Controller
             }
 
             if ($this->customers_model->exists($customer)) {
-                $customer['id'] = $this->customers_model->find_record_id($customer);
+                // In manage mode the customer id is already pinned to the hash-matched appointment's
+                // owner and must not be reassigned from client-provided contact details.
+                if (!$manage_mode) {
+                    $customer['id'] = $this->customers_model->find_record_id($customer);
+                }
 
                 $existing_appointments = $this->appointments_model->get([
                     'id !=' => $manage_mode ? $appointment['id'] : null,
@@ -547,7 +578,32 @@ class Booking extends EA_Controller
 
             $this->appointments_model->only($appointment, $this->allowed_appointment_fields);
 
-            $appointment_id = $this->appointments_model->save($appointment);
+            // Serialize the final availability check and the insert per provider so that two
+            // concurrent requests cannot both pass the check and book the same slot (R2). A MySQL
+            // advisory lock keyed on the provider keeps the window atomic without a schema change.
+            $provider_id = (int) $appointment['id_users_provider'];
+
+            $this->acquire_provider_lock($provider_id);
+
+            try {
+                $exclude_appointment_id = $manage_mode ? ($appointment['id'] ?? null) : null;
+
+                if (
+                    !$this->is_slot_available(
+                        $provider_id,
+                        (int) $appointment['id_services'],
+                        $appointment['start_datetime'],
+                        $exclude_appointment_id,
+                    )
+                ) {
+                    throw new RuntimeException(lang('requested_hour_is_unavailable'));
+                }
+
+                $appointment_id = $this->appointments_model->save($appointment);
+            } finally {
+                $this->release_provider_lock($provider_id);
+            }
+
             $appointment = $this->appointments_model->find($appointment_id);
 
             $company_color = setting('company_color');
@@ -643,6 +699,85 @@ class Booking extends EA_Controller
         }
 
         return $is_still_available ? $appointment['id_users_provider'] : null;
+    }
+
+    /**
+     * Check whether a specific provider is still free for the requested service at the given time.
+     *
+     * Unlike check_datetime_availability() this never resolves the "any provider" placeholder; it
+     * verifies one concrete provider and is used for the final, locked availability re-check.
+     *
+     * @param int $provider_id Provider user id.
+     * @param int $service_id Service id.
+     * @param string $start_datetime Requested start datetime (Y-m-d H:i:s).
+     * @param int|null $exclude_appointment_id Appointment id to ignore (used when rescheduling).
+     *
+     * @return bool
+     *
+     * @throws Exception
+     */
+    protected function is_slot_available(
+        int $provider_id,
+        int $service_id,
+        string $start_datetime,
+        ?int $exclude_appointment_id = null,
+    ): bool {
+        $service = $this->services_model->find($service_id);
+
+        $provider = $this->providers_model->find($provider_id);
+
+        $date = date('Y-m-d', strtotime($start_datetime));
+
+        $hour = date('H:i', strtotime($start_datetime));
+
+        $available_hours = $this->availability->get_available_hours($date, $service, $provider, $exclude_appointment_id);
+
+        foreach ($available_hours as $available_hour) {
+            if ($hour === $available_hour) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Build the advisory lock name used to serialize bookings for a provider.
+     *
+     * @param int $provider_id Provider user id.
+     *
+     * @return string
+     */
+    protected function provider_lock_name(int $provider_id): string
+    {
+        // MySQL lock names must be at most 64 characters.
+        return 'ea_booking_provider_' . $provider_id;
+    }
+
+    /**
+     * Acquire a MySQL advisory lock for the given provider.
+     *
+     * @param int $provider_id Provider user id.
+     *
+     * @throws RuntimeException If the lock cannot be acquired within the timeout.
+     */
+    protected function acquire_provider_lock(int $provider_id): void
+    {
+        $row = $this->db->query('SELECT GET_LOCK(?, 10) AS acquired', [$this->provider_lock_name($provider_id)])->row();
+
+        if (!$row || (int) $row->acquired !== 1) {
+            throw new RuntimeException(lang('requested_hour_is_unavailable'));
+        }
+    }
+
+    /**
+     * Release the MySQL advisory lock for the given provider.
+     *
+     * @param int $provider_id Provider user id.
+     */
+    protected function release_provider_lock(int $provider_id): void
+    {
+        $this->db->query('SELECT RELEASE_LOCK(?)', [$this->provider_lock_name($provider_id)]);
     }
 
     /**

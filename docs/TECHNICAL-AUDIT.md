@@ -198,6 +198,10 @@ rendern korrekt (Desktop); Kunden auch Mobile. Screenshots: `docs/audit-screensh
 
 > Verifiziert ausschließlich auf einer lokalen **Wegwerf-Instanz mit synthetischen Testdaten**.
 > Keine echten Daten, keine Produktionsumgebung berührt.
+>
+> **Status-Update (Phase 2):** R1 und R2 sind inzwischen behoben (Branch `feature/premium-ui`),
+> abgesichert durch die opt-in Suite `tests/Integration/BookingSecurityTest.php`
+> (rot vor dem Fix, grün danach). Details siehe CHANGELOG (`[Unreleased]`).
 
 - **R1 – Fehlende Autorisierung/Ownership-Prüfung in `Booking::register()` (IDOR/Broken Access Control).**
   Der öffentliche Endpoint `booking/register` übernimmt `post_data[appointment][id]` und
