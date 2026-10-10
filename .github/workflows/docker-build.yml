@@ -32,7 +32,7 @@ jobs:
 
       - name: Set short SHA
         id: vars
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+        run: echo "sha_short=$(git rev-parse --short=8 HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Build and push PHP-FPM image
         uses: docker/build-push-action@v6
