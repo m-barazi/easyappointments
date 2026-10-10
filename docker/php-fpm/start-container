@@ -1,13 +1,20 @@
 #!/bin/bash
 
+REPO_URL="https://github.com/m-barazi/easyappointments.git"
+
+if [ -z "$(ls -A /var/www/html 2>/dev/null)" ]; then
+    echo "➜ Project directory is empty, cloning repository"
+    git clone "$REPO_URL" .
+fi
+
 echo "➜ Ignore Permission Changes"
-git config core.fileMode false
+git config core.fileMode false || true
 
 echo "➜ Set Correct Permissions"
 chmod -R 777 storage
 
 echo "➜ Install Composer Dependencies"
-[[ -d vendor ]] || composer install
+[[ -d vendor ]] || composer install --no-dev --optimize-autoloader
 
 echo "➜ Install NPM Dependencies"
 [[ -d node_modules ]] || npm install
