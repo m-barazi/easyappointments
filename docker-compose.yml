@@ -2,12 +2,16 @@ services:
   php-fpm:
     image: 'ghcr.io/m-barazi/easyappointments-php-fpm:967fb5c2'
     working_dir: /var/www/html
+    volumes:
+      - app-source:/var/www/html
     extra_hosts:
       - host.docker.internal:host-gateway
 
   nginx:
     image: 'ghcr.io/m-barazi/easyappointments-nginx:967fb5c2'
     working_dir: /var/www/html
+    volumes:
+      - app-source:/var/www/html
     ports:
       - '${NGINX_PORT:-8082}:80'
 
@@ -88,3 +92,5 @@ services:
     depends_on:
       - openldap
 
+volumes:
+  app-source:
