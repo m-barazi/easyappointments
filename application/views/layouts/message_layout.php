@@ -9,7 +9,7 @@
 
     <?php slot('meta'); ?>
 
-    <title><?= vars('page_title') ?> | Easy!Appointments</title>
+    <title><?= vars('page_title') ?> | <?= e(brand_name()) ?></title>
 
     <link rel="icon" type="image/x-icon" href="<?= asset_url('assets/img/favicon.ico') ?>">
     <link rel="icon" sizes="192x192" href="<?= asset_url('assets/img/logo.png') ?>">
@@ -31,18 +31,21 @@
 
             <div class="mt-2">
                 <small>
-                    Powered by
-                    <a href="https://easyappointments.org">Easy!Appointments</a>
-
+                    <?php $footer_links = []; ?>
+                    <?php if ($powered_by = brand_powered_by_html()): ?>
+                        <?php $footer_links[] = $powered_by; ?>
+                    <?php endif; ?>
                     <?php if (vars('legal_notice_url')): ?>
-                        <span class="mx-1">|</span>
-                        <a href="<?= e(vars('legal_notice_url')) ?>" target="_blank"><?= lang('legal_notice') ?></a>
+                        <?php $footer_links[] =
+                            '<a href="' . e(vars('legal_notice_url')) . '" target="_blank">' .
+                            lang('legal_notice') . '</a>'; ?>
                     <?php endif; ?>
-
                     <?php if (vars('imprint_url')): ?>
-                        <span class="mx-1">|</span>
-                        <a href="<?= e(vars('imprint_url')) ?>" target="_blank"><?= lang('imprint') ?></a>
+                        <?php $footer_links[] =
+                            '<a href="' . e(vars('imprint_url')) . '" target="_blank">' .
+                            lang('imprint') . '</a>'; ?>
                     <?php endif; ?>
+                    <?= implode(' <span class="mx-1">|</span> ', $footer_links) ?>
                 </small>
 
                 <?php if (vars('display_login_button')): ?>

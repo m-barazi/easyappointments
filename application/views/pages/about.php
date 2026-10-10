@@ -6,14 +6,16 @@
     <div id="about" class="col-lg-8 offset-lg-2">
 
         <div class="text-center my-5">
-            <img src="<?= base_url('assets/img/logo.png') ?>" alt="Easy!Appointments Logo" class="mb-5">
+            <img src="<?= base_url('assets/img/logo.png') ?>" alt="<?= e(brand_name()) ?>" class="mb-5">
 
             <h3>
-                Easy!Appointments
+                <?= e(brand_name()) ?>
             </h3>
-            <h6 class="text-primary">
-                Online Appointment Scheduler
-            </h6>
+            <?php if (brand_tagline()): ?>
+                <h6 class="text-primary">
+                    <?= e(brand_tagline()) ?>
+                </h6>
+            <?php endif; ?>
         </div>
 
         <p class="mb-5">
@@ -32,6 +34,8 @@
                 </strong>
             </div>
         </div>
+
+        <?php if (brand_show_vendor_links()): ?>
 
         <h4 class="fw-light mb-3">
             <?= lang('latest_blog_posts') ?>
@@ -127,6 +131,8 @@
                 </a>
             </div>
         </div>
+
+        <?php endif; /* brand_show_vendor_links */ ?>
 
         <h4 class="fw-light mb-3">
             <?= lang('license') ?>

@@ -7,6 +7,11 @@ developers to maintain and readjust their custom modifications on the main proje
 
 ### Added
 
+- White-label / branding: a central branding configuration (`application/config/brand.php`) and a
+  `brand_helper` expose the product name, tagline, link and optional "Powered by" / vendor-promo
+  elements, so the brand is no longer hard-coded across templates. White-labelling is now a single
+  config edit (set `brand_name`, toggle `brand_show_powered_by` / `brand_show_vendor_links`); the
+  defaults keep the current appearance. Required GPL-3.0 and copyright notices are preserved.
 - Admin dashboard polish: the record-management pages (customers, services, providers, …) now use
   surface cards for the list and detail panes, card-like list rows with a clear hover state and a
   prominent selected state (teal tint plus a left accent bar, so selection is not conveyed by colour

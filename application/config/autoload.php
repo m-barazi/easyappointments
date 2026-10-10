@@ -66,6 +66,7 @@ $autoload['libraries'] = ['database', 'session'];
 $autoload['helper'] = [
     'array',
     'asset',
+    'brand',
     'config',
     'date',
     'debug',
@@ -101,7 +102,7 @@ $autoload['helper'] = [
 |
 */
 
-$autoload['config'] = ['app', 'google', 'email'];
+$autoload['config'] = ['app', 'brand', 'google', 'email'];
 
 /*
 | -------------------------------------------------------------------

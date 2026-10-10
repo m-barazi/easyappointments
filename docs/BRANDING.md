@@ -7,6 +7,52 @@
 
 Erstellt: 2026-10-09
 
+## Phase 5 – Umsetzung: zentrale White-Label-Konfiguration
+
+Umgesetzt in Branch `feature/premium-ui`. Statt Markennamen über viele Templates
+hart zu codieren, gibt es jetzt **eine zentrale Konfiguration** plus einen Helper:
+
+- `application/config/brand.php` – zentrale Werte (automatisch geladen via
+  `$autoload['config']`):
+  - `brand_name` – Produktname in Titeln/Footern (Default `Easy!Appointments`).
+  - `brand_tagline` – Zusatzzeile (Default `Online Appointment Scheduler`).
+  - `brand_url` – Link des Branding-Footers (leer = reiner Text).
+  - `brand_show_powered_by` (bool) – „Powered by …"-Zeile ein/aus.
+  - `brand_show_vendor_links` (bool) – Autoren-Logo/-Link und „Premium"-Link ein/aus.
+- `application/helpers/brand_helper.php` – `brand_name()`, `brand_tagline()`,
+  `brand_url()`, `brand_show_powered_by()`, `brand_show_vendor_links()`,
+  `brand_powered_by_html()` (gibt `''` zurück, wenn deaktiviert; Ausgaben HTML-escaped).
+
+**So wird white-gelabelt:** nur `application/config/brand.php` anpassen –
+z. B. `brand_name` setzen, `brand_show_powered_by`/`brand_show_vendor_links`
+auf `false`. Default-Werte lassen das Verhalten unverändert (keine Überraschung
+für Bestandsinstallationen). Firmenlogo/Firmenname/Firmenfarbe bleiben wie bisher
+über die Einstellungen `company_logo` / `company_name` / `company_color` steuerbar.
+
+**Ersetzte Stellen** (verweisen jetzt auf den Helper): Buchungs-Footer, Backend-Header
+und -Footer, Account-/Message-/Backend-/Booking-Layout-Titel, Login/Logout/Recovery/
+Password-Reset (Logo-Alt), About-Seite (inkl. Vendor-Promo-Sektionen hinter
+`brand_show_vendor_links`), Installations- und Update-Seite, Fehlerseiten
+(404/DB/General, defensiv via `function_exists`), alle vier E-Mail-Vorlagen
+(Titel + „Powered by", Firmenlink bleibt).
+
+**Bewusst NICHT geändert (erforderliche Lizenz-/Urheberhinweise):**
+- `LICENSE` (GPL-3.0 Volltext).
+- Der sichtbare „Licensed Under GPL-3.0"-Hinweis im Backend-Footer.
+- Der GPL-Lizenzsatz auf der Installationsseite nennt weiterhin den echten
+  Softwarenamen „Easy!Appointments" (korrekte Lizenz-Attribution, kein Branding).
+- Die `@author`/`@copyright`/`@license`-Kommentarköpfe in den Quelldateien.
+
+**Noch offen (Entscheidung „später klären"):**
+- WordPress-/iframe-Einbettung: `X-Frame-Options: SAMEORIGIN` bleibt unverändert.
+  Für eine Einbettung auf fremder Domain müsste dies auf eine konfigurierbare
+  `Content-Security-Policy: frame-ancestors` umgestellt werden (siehe Audit §7-R7).
+- E-Mail-Logo (`cid:logo.png` aus `assets/img/logo.png`) und App-Logos/Favicon
+  werden weiterhin aus `assets/img/` geladen; für ein eigenes Logo diese Dateien
+  ersetzen (bzw. `company_logo` für die Buchungs-/Backend-Kopfzeile nutzen).
+
+---
+
 ## Bereits vorhandene Branding-Konfiguration (wiederverwenden!)
 
 - `company_logo` – Einstellung, Migration `application/migrations/032_add_company_logo_setting.php`.
