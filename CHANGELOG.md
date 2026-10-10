@@ -3,6 +3,46 @@
 This file contains the code changes that were introduced into each release (starting from v1.1.0) so that is easy for 
 developers to maintain and readjust their custom modifications on the main project codebase.
 
+## [Unreleased]
+
+### Added
+
+- White-label / branding: a central branding configuration (`application/config/brand.php`) and a
+  `brand_helper` expose the product name, tagline, link and optional "Powered by" / vendor-promo
+  elements, so the brand is no longer hard-coded across templates. White-labelling is now a single
+  config edit (set `brand_name`, toggle `brand_show_powered_by` / `brand_show_vendor_links`); the
+  defaults keep the current appearance. Required GPL-3.0 and copyright notices are preserved.
+- Admin dashboard polish: the record-management pages (customers, services, providers, …) now use
+  surface cards for the list and detail panes, card-like list rows with a clear hover state and a
+  prominent selected state (teal tint plus a left accent bar, so selection is not conveyed by colour
+  alone), styled empty states, and keyboard focus outlines; the customer "appointments" panel is no
+  longer capped at 330px, and the pages are checked for no horizontal overflow on small screens
+- Booking wizard: explicit loading, empty and server-error states for the available appointment
+  hours, with an accessible live region (`aria-busy`, `aria-live`) and `aria-pressed` time slots
+- Booking wizard accessibility: step indicator exposed as a labelled list with `aria-current`,
+  required fields marked `aria-required`, invalid fields marked `aria-invalid` with focus moved to
+  the first offending field
+- Add a selectable "premium" theme (`assets/css/themes/premium.scss`): calm, high-end look with
+  navy typography, restrained turquoise accents, fine borders and soft shadows, design tokens
+  exposed as CSS custom properties, visible keyboard focus and reduced-motion support
+- Bundle the Inter font locally (SIL Open Font License) for the premium theme instead of loading it
+  from a third-party font CDN
+
+### Fixed
+
+- Booking wizard: show the customer-form validation message (the `#form-message` element it targeted
+  did not exist, so required-field/validation errors were silently dropped) and a visible error when
+  the appointment submission fails on the server
+- Fix the public booking endpoint so it can no longer update an arbitrary appointment or customer
+  record by sending its numeric id; updates now require the secret appointment hash (IDOR)
+- Prevent double bookings under concurrent requests by serializing the final availability check and
+  insert per provider with a MySQL advisory lock
+
+### Changed
+
+- Repair the asset build pipeline (replace the removed `del.sync` API; use `gulp-terser` for JS
+  minification instead of the Babel 8 incompatible `babel-preset-minify`)
+
 ## [1.6.0] - 2026-05-27
 
 ### Added

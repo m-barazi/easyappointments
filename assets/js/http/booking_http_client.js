@@ -43,7 +43,20 @@ App.Http.Booking = (function () {
      * @param {String} selectedDate The selected date of the available hours we need.
      */
     function getAvailableHours(selectedDate) {
-        $availableHours.empty();
+        // Show a loading state while the available hours are being fetched.
+        $availableHours
+            .attr('aria-busy', 'true')
+            .empty()
+            .append(
+                $('<div/>', {'class': 'available-hours-state text-center text-muted py-4'}).append(
+                    $('<span/>', {
+                        'class': 'spinner-border spinner-border-sm me-2',
+                        'role': 'status',
+                        'aria-hidden': 'true',
+                    }),
+                    document.createTextNode(lang('loading') + '…'),
+                ),
+            );
 
         // Find the selected service duration (it is going to be send within the "data" object).
         const serviceId = $selectService.val();
@@ -115,7 +128,9 @@ App.Http.Booking = (function () {
 
                     $availableHours.append(
                         $('<button/>', {
+                            'type': 'button',
                             'class': 'btn btn-outline-secondary w-100 shadow-none available-hour',
+                            'aria-pressed': 'false',
                             'data': {
                                 'value': availableHour,
                             },
@@ -139,13 +154,42 @@ App.Http.Booking = (function () {
                     $('.available-hour:eq(0)').addClass('selected-hour');
                 }
 
+                // Keep the ARIA pressed state in sync with the visual selection.
+                $availableHours.find('.available-hour').attr('aria-pressed', 'false');
+                $availableHours.find('.selected-hour').attr('aria-pressed', 'true');
+
                 App.Pages.Booking.updateConfirmFrame();
             }
 
             if (!$availableHours.find('.available-hour').length) {
-                $availableHours.text(lang('no_available_hours'));
+                // Empty state: no bookable hours for the selected date.
+                $availableHours
+                    .empty()
+                    .append(
+                        $('<div/>', {'class': 'available-hours-state text-center text-muted py-4'}).append(
+                            $('<i/>', {'class': 'fas fa-calendar-xmark d-block fs-3 mb-2 opacity-50', 'aria-hidden': 'true'}),
+                            document.createTextNode(lang('no_available_hours')),
+                        ),
+                    );
             }
-        });
+        })
+            .fail(() => {
+                // Server error: let the customer know instead of showing an empty list.
+                $availableHours
+                    .empty()
+                    .append(
+                        $('<div/>', {'class': 'available-hours-state text-center text-danger py-4', 'role': 'alert'}).append(
+                            $('<i/>', {
+                                'class': 'fas fa-triangle-exclamation d-block fs-3 mb-2',
+                                'aria-hidden': 'true',
+                            }),
+                            document.createTextNode(lang('unexpected_issues_occurred')),
+                        ),
+                    );
+            })
+            .always(() => {
+                $availableHours.attr('aria-busy', 'false');
+            });
     }
 
     /**
@@ -251,7 +295,20 @@ App.Http.Booking = (function () {
                 window.location.href = App.Utils.Url.siteUrl('booking_confirmation/of/' + response.appointment_hash);
             })
             .fail(() => {
+                // Surface a clear error instead of failing silently; refresh the CAPTCHA too.
                 $captchaTitle.find('button').trigger('click');
+
+                const $registerMessage = $('#register-message');
+                $registerMessage
+                    .removeClass('d-none')
+                    .html(
+                        $('<span/>').append(
+                            $('<i/>', {'class': 'fas fa-triangle-exclamation me-2', 'aria-hidden': 'true'}),
+                            document.createTextNode(lang('unexpected_issues_occurred')),
+                        ),
+                    );
+
+                $registerMessage.get(0)?.scrollIntoView({block: 'nearest'});
             })
             .always(() => {
                 $layer.remove();

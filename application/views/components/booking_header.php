@@ -22,27 +22,32 @@
         </div>
     </div>
 
-    <div id="steps" class="d-block d-md-inline-block float-md-end overflow-hidden mx-auto my-3 my-md-1" style="width: 200px;">
+    <div id="steps" class="d-block d-md-inline-block float-md-end overflow-hidden mx-auto my-3 my-md-1"
+         style="width: 200px;" role="list" aria-label="<?= lang('appointment') ?>">
         <div id="step-1" class="book-step active-step d-inline-block float-start rounded text-center bg-white"
+             role="listitem" aria-current="step" aria-label="1. <?= lang('service_and_provider') ?>"
              data-tippy-content="<?= lang('service_and_provider') ?>"
              style="height: 45px; width: 45px; padding: 7px; margin-right: 13px; transition: all 0.3s linear;">
-            <strong class="d-block text-primary" style="font-size: 21px; cursor: default;">1</strong>
+            <strong class="d-block text-primary" style="font-size: 21px; cursor: default;" aria-hidden="true">1</strong>
         </div>
 
-        <div id="step-2" class="book-step d-inline-block float-start rounded" data-bs-toggle="tooltip"
+        <div id="step-2" class="book-step d-inline-block float-start rounded" role="listitem" data-bs-toggle="tooltip"
+             aria-label="2. <?= lang('appointment_date_and_time') ?>"
              data-tippy-content="<?= lang('appointment_date_and_time') ?>"
              style="height: 35px; width: 35px; background: rgba(0,0,0,0.2); padding: 8px; margin-right: 12px; margin-top: 6px; transition: all 0.3s linear;">
-            <strong class="d-block text-center text-white-50" style="font-size: 12px; cursor: default;">2</strong>
+            <strong class="d-block text-center text-white-50" style="font-size: 12px; cursor: default;" aria-hidden="true">2</strong>
         </div>
-        <div id="step-3" class="book-step d-inline-block float-start rounded" data-bs-toggle="tooltip"
+        <div id="step-3" class="book-step d-inline-block float-start rounded" role="listitem" data-bs-toggle="tooltip"
+             aria-label="3. <?= lang('customer_information') ?>"
              data-tippy-content="<?= lang('customer_information') ?>"
              style="height: 35px; width: 35px; background: rgba(0,0,0,0.2); padding: 8px; margin-right: 12px; margin-top: 6px; transition: all 0.3s linear;">
-            <strong class="d-block text-center text-white-50" style="font-size: 12px; cursor: default;">3</strong>
+            <strong class="d-block text-center text-white-50" style="font-size: 12px; cursor: default;" aria-hidden="true">3</strong>
         </div>
-        <div id="step-4" class="book-step d-inline-block float-start rounded" data-bs-toggle="tooltip"
+        <div id="step-4" class="book-step d-inline-block float-start rounded" role="listitem" data-bs-toggle="tooltip"
+             aria-label="4. <?= lang('appointment_confirmation') ?>"
              data-tippy-content="<?= lang('appointment_confirmation') ?>"
              style="height: 35px; width: 35px; background: rgba(0,0,0,0.2); padding: 8px; margin-right: 0; margin-top: 6px; transition: all 0.3s linear;">
-            <strong class="d-block text-center text-white-50" style="font-size: 12px; cursor: default;">4</strong>
+            <strong class="d-block text-center text-white-50" style="font-size: 12px; cursor: default;" aria-hidden="true">4</strong>
         </div>
     </div>
 </div>

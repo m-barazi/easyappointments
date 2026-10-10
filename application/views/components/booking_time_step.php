@@ -29,7 +29,9 @@
                         ]); ?>
                     </div>
 
-                    <div id="available-hours" class="overflow-auto my-3 pe-2" style="max-height: 250px;"></div>
+                    <div id="available-hours" class="overflow-auto my-3 pe-2" style="max-height: 250px;"
+                         role="group" aria-label="<?= lang('appointment_date_and_time') ?>" aria-live="polite"
+                         aria-busy="false"></div>
 
                 </div>
             </div>

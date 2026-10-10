@@ -1,0 +1,689 @@
+/* ----------------------------------------------------------------------------
+ * Easy!Appointments - Online Appointment Scheduler
+ *
+ * @package     EasyAppointments
+ * @author      A.Tselegidis <alextselegidis@gmail.com>
+ * @copyright   Copyright (c) Alex Tselegidis
+ * @license     https://opensource.org/licenses/GPL-3.0 - GPLv3
+ * @link        https://easyappointments.org
+ * @since       v1.6.0
+ * ---------------------------------------------------------------------------- */
+
+// Premium Theme
+// A calm, high-end look: generous whitespace, dark navy typography, restrained
+// turquoise accents, fine borders and soft shadows, rounded cards and
+// consistent forms. Accessible contrast, visible keyboard focus and reduced
+// motion support. Built on Bootstrap 5 and selectable via the "theme" setting.
+//
+// The design tokens are also exposed as CSS custom properties on :root (see the
+// end of this file) so application code can reference them directly.
+
+//
+// Fonts - Inter (bundled locally under assets/fonts/inter, SIL Open Font License)
+//
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../../fonts/inter/inter-400.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../../fonts/inter/inter-500.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('../../fonts/inter/inter-600.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../../fonts/inter/inter-700.woff2') format('woff2');
+}
+
+//
+// Color system - Slate neutrals + teal accent (Tailwind-inspired, accessible)
+//
+
+$white: #fff !default;
+$gray-100: #f8fafc !default; // slate-50  (page background)
+$gray-200: #e2e8f0 !default; // slate-200 (borders)
+$gray-300: #cbd5e1 !default; // slate-300
+$gray-400: #94a3b8 !default; // slate-400
+$gray-500: #64748b !default; // slate-500 (muted text)
+$gray-600: #475569 !default; // slate-600
+$gray-700: #334155 !default; // slate-700
+$gray-800: #1e293b !default; // slate-800
+$gray-900: #0f172a !default; // slate-900 (primary text)
+$black: #000 !default;
+
+$teal: #0d9488 !default; // teal-600
+$teal-hover: #0f766e !default; // teal-700
+
+$blue: #0ea5e9 !default;
+$indigo: #6366f1 !default;
+$purple: #8b5cf6 !default;
+$pink: #ec4899 !default;
+$red: #dc2626 !default;
+$orange: #d97706 !default;
+$yellow: #eab308 !default;
+$green: #16a34a !default;
+$cyan: #06b6d4 !default;
+
+$primary: $teal !default;
+$secondary: $gray-100 !default;
+$success: $green !default;
+$info: $blue !default;
+$warning: $orange !default;
+$danger: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-900 !default;
+
+// Keep button/badge contrast readable without forcing pure-black text on
+// mid-tone accents.
+$min-contrast-ratio: 3 !default;
+$color-contrast-dark: $gray-900 !default;
+$color-contrast-light: $white !default;
+
+//
+// Options
+//
+
+$enable-rounded: true !default;
+$enable-shadows: true !default;
+$enable-gradients: false !default;
+$enable-negative-margins: true !default;
+
+//
+// Spacing & body
+//
+
+$body-bg: $gray-100 !default;
+$body-color: $gray-900 !default;
+$body-secondary-color: $gray-500 !default;
+
+//
+// Typography
+//
+
+// stylelint-disable-next-line value-keyword-case
+$font-family-sans-serif:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !default;
+
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-medium: 500 !default;
+$font-weight-semibold: 600 !default;
+$font-weight-bold: 700 !default;
+
+$font-size-base: 1rem !default;
+$font-size-sm: 0.875rem !default;
+$font-size-lg: 1.125rem !default;
+
+$line-height-base: 1.6 !default;
+
+$h1-font-size: 2.25rem !default;
+$h2-font-size: 1.75rem !default;
+$h3-font-size: 1.5rem !default;
+$h4-font-size: 1.25rem !default;
+$h5-font-size: 1.0625rem !default;
+$h6-font-size: 0.9375rem !default;
+$headings-font-weight: 600 !default;
+$headings-color: $gray-900 !default;
+$headings-line-height: 1.25 !default;
+
+//
+// Border radius - rounded cards (14px) and controls (10px)
+//
+
+$border-color: $gray-200 !default;
+$border-radius: 0.625rem !default; // 10px - controls
+$border-radius-sm: 0.5rem !default; // 8px
+$border-radius-lg: 0.875rem !default; // 14px - cards
+$border-radius-xl: 1rem !default;
+$border-radius-xxl: 1.25rem !default;
+$border-radius-pill: 50rem !default;
+
+//
+// Shadows - soft and restrained
+//
+
+$box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05) !default;
+$box-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04) !default;
+$box-shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1) !default;
+$box-shadow-inset: inset 0 1px 2px rgba(15, 23, 42, 0.05) !default;
+
+//
+// Links
+//
+
+$link-color: $teal !default;
+$link-hover-color: $teal-hover !default;
+$link-decoration: none !default;
+$link-hover-decoration: underline !default;
+
+//
+// Focus ring - visible teal ring for keyboard users
+//
+
+$focus-ring-width: 0.1875rem !default;
+$focus-ring-opacity: 0.35 !default;
+$focus-ring-color: rgba($teal, $focus-ring-opacity) !default;
+
+//
+// Components
+//
+
+$border-color-translucent: rgba($gray-900, 0.08) !default;
+
+// Buttons & inputs
+$input-btn-focus-width: 0.1875rem !default;
+$input-btn-focus-color-opacity: 0.25 !default;
+
+$btn-padding-y: 0.625rem !default;
+$btn-padding-x: 1.25rem !default;
+$btn-font-weight: 500 !default;
+$btn-border-radius: $border-radius !default;
+$btn-border-radius-sm: $border-radius-sm !default;
+$btn-border-radius-lg: $border-radius !default;
+$btn-focus-box-shadow: 0 0 0 $focus-ring-width $focus-ring-color !default;
+
+$input-padding-y: 0.625rem !default;
+$input-padding-x: 0.875rem !default;
+$input-bg: $white !default;
+$input-disabled-bg: $gray-100 !default;
+$input-border-color: $gray-300 !default;
+$input-border-radius: $border-radius !default;
+$input-border-radius-sm: $border-radius-sm !default;
+$input-border-radius-lg: $border-radius !default;
+$input-focus-border-color: $teal !default;
+$input-focus-box-shadow: 0 0 0 $focus-ring-width $focus-ring-color !default;
+$input-placeholder-color: $gray-400 !default;
+
+$form-label-font-weight: 500 !default;
+$form-label-color: $gray-700 !default;
+$form-label-margin-bottom: 0.375rem !default;
+
+$form-select-border-radius: $border-radius !default;
+$form-check-input-border: 1px solid $gray-400 !default;
+
+// Cards
+$card-spacer-y: 1.5rem !default;
+$card-spacer-x: 1.5rem !default;
+$card-border-width: 1px !default;
+$card-border-color: $border-color !default;
+$card-border-radius: $border-radius-lg !default;
+$card-box-shadow: $box-shadow !default;
+$card-cap-bg: $white !default;
+$card-bg: $white !default;
+
+// Navbar
+$navbar-padding-y: 0.75rem !default;
+$navbar-light-color: $gray-600 !default;
+$navbar-light-hover-color: $gray-900 !default;
+$navbar-light-active-color: $teal !default;
+
+// Dropdowns
+$dropdown-border-color: $border-color !default;
+$dropdown-border-radius: $border-radius-lg !default;
+$dropdown-box-shadow: $box-shadow-lg !default;
+$dropdown-link-hover-bg: $gray-100 !default;
+$dropdown-link-active-bg: rgba($teal, 0.1) !default;
+$dropdown-link-active-color: $teal-hover !default;
+$dropdown-item-padding-y: 0.5rem !default;
+$dropdown-item-padding-x: 1rem !default;
+
+// Modals
+$modal-content-border-width: 1px !default;
+$modal-content-border-color: $border-color !default;
+$modal-content-border-radius: $border-radius-lg !default;
+$modal-content-box-shadow-xs: $box-shadow-lg !default;
+$modal-content-box-shadow-sm-up: $box-shadow-lg !default;
+$modal-header-border-color: $border-color !default;
+$modal-footer-border-color: $border-color !default;
+$modal-backdrop-opacity: 0.4 !default;
+
+// Tables
+$table-color: $gray-900 !default;
+$table-border-color: $border-color !default;
+$table-striped-bg: rgba($gray-500, 0.04) !default;
+$table-hover-bg: rgba($teal, 0.04) !default;
+$table-cell-padding-y: 0.875rem !default;
+$table-cell-padding-x: 1rem !default;
+
+// Badges
+$badge-font-size: 0.75rem !default;
+$badge-font-weight: 600 !default;
+$badge-padding-y: 0.35em !default;
+$badge-padding-x: 0.65em !default;
+$badge-border-radius: $border-radius-sm !default;
+
+// Alerts
+$alert-border-radius: $border-radius-lg !default;
+$alert-border-width: 1px !default;
+$alert-padding-y: 1rem !default;
+$alert-padding-x: 1.25rem !default;
+
+// List group
+$list-group-border-color: $border-color !default;
+$list-group-border-radius: $border-radius-lg !default;
+$list-group-hover-bg: $gray-100 !default;
+$list-group-active-bg: $teal !default;
+$list-group-active-border-color: $teal !default;
+
+// Nav tabs / pills
+$nav-tabs-border-color: $border-color !default;
+$nav-pills-border-radius: $border-radius !default;
+$nav-pills-link-active-bg: $teal !default;
+
+// Popovers / tooltips / toasts
+$popover-border-color: $border-color !default;
+$popover-border-radius: $border-radius-lg !default;
+$popover-box-shadow: $box-shadow-lg !default;
+$tooltip-border-radius: $border-radius-sm !default;
+$tooltip-bg: $gray-900 !default;
+$toast-border-color: $border-color !default;
+$toast-border-radius: $border-radius-lg !default;
+$toast-box-shadow: $box-shadow-lg !default;
+
+// Progress & pagination
+$progress-bg: $gray-200 !default;
+$progress-border-radius: $border-radius-pill !default;
+$pagination-border-radius: $border-radius-sm !default;
+$pagination-hover-bg: $gray-100 !default;
+$pagination-active-bg: $teal !default;
+$pagination-focus-box-shadow: 0 0 0 $focus-ring-width $focus-ring-color !default;
+
+// Transitions
+$transition-base: all 0.18s ease-in-out !default;
+
+@import '../../../node_modules/bootstrap/scss/bootstrap';
+
+// ----------------------------------------------------------------------------
+// Design tokens as CSS custom properties (reusable across the application).
+// ----------------------------------------------------------------------------
+
+:root {
+    --color-text: #{$gray-900};
+    --color-primary: #{$teal};
+    --color-primary-hover: #{$teal-hover};
+    --color-background: #{$gray-100};
+    --color-surface: #{$white};
+    --color-border: #{$gray-200};
+    --color-muted: #{$gray-500};
+
+    --radius-card: 0.875rem; // 14px
+    --radius-control: 0.625rem; // 10px
+
+    --shadow-card: 0 4px 20px rgb(15 23 42 / 0.05);
+    --shadow-lg: 0 12px 32px rgb(15 23 42 / 0.1);
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+}
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    letter-spacing: -0.011em;
+}
+
+hr {
+    border-top-color: var(--color-border);
+    opacity: 1;
+}
+
+// ----------------------------------------------------------------------------
+// Accessibility: visible keyboard focus + reduced motion
+// ----------------------------------------------------------------------------
+
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+.form-check-input:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 $focus-ring-width $focus-ring-color;
+}
+
+// Only remove the default outline when a visible replacement is provided.
+.btn:focus:not(:focus-visible) {
+    outline: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Buttons
+// ----------------------------------------------------------------------------
+
+.btn {
+    font-weight: 500;
+    transition:
+        color 0.18s ease,
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.btn-primary {
+    --bs-btn-color: #{$white};
+    --bs-btn-bg: #{$teal};
+    --bs-btn-border-color: #{$teal};
+    --bs-btn-hover-color: #{$white};
+    --bs-btn-hover-bg: #{$teal-hover};
+    --bs-btn-hover-border-color: #{$teal-hover};
+    --bs-btn-active-color: #{$white};
+    --bs-btn-active-bg: #{$teal-hover};
+    --bs-btn-active-border-color: #{$teal-hover};
+    --bs-btn-disabled-color: #{$white};
+    --bs-btn-disabled-bg: #{$teal};
+    --bs-btn-disabled-border-color: #{$teal};
+    box-shadow: 0 1px 2px rgba($teal, 0.25);
+}
+
+.btn-secondary {
+    --bs-btn-color: #{$gray-700};
+    --bs-btn-bg: #{$white};
+    --bs-btn-border-color: #{$gray-300};
+    --bs-btn-hover-color: #{$gray-900};
+    --bs-btn-hover-bg: #{$gray-100};
+    --bs-btn-hover-border-color: #{$gray-400};
+    --bs-btn-active-color: #{$gray-900};
+    --bs-btn-active-bg: #{$gray-200};
+    --bs-btn-active-border-color: #{$gray-400};
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: #{$gray-600};
+    --bs-btn-border-color: #{$gray-300};
+    --bs-btn-hover-color: #{$gray-900};
+    --bs-btn-hover-bg: #{$gray-100};
+    --bs-btn-hover-border-color: #{$gray-400};
+    --bs-btn-active-color: #{$gray-900};
+    --bs-btn-active-bg: #{$gray-100};
+    --bs-btn-active-border-color: #{$gray-400};
+}
+
+.btn-link {
+    --bs-btn-color: #{$teal};
+    --bs-btn-hover-color: #{$teal-hover};
+}
+
+// ----------------------------------------------------------------------------
+// Forms
+// ----------------------------------------------------------------------------
+
+.form-control,
+.form-select {
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--color-muted);
+}
+
+.input-group-text {
+    background-color: var(--color-background);
+    border-color: $gray-300;
+    color: var(--color-muted);
+}
+
+.form-check-input:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+// Clear, legible validation feedback
+.invalid-feedback,
+.form-text.text-danger {
+    font-size: $font-size-sm;
+}
+
+.form-control.is-invalid,
+.was-validated .form-control:invalid {
+    border-color: $danger;
+}
+
+// ----------------------------------------------------------------------------
+// Cards & surfaces
+// ----------------------------------------------------------------------------
+
+.card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+}
+
+.card-header,
+.card-footer {
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+}
+
+.card-title,
+.card-header {
+    color: $gray-900;
+    font-weight: 600;
+}
+
+// ----------------------------------------------------------------------------
+// Navbar & dropdowns
+// ----------------------------------------------------------------------------
+
+.navbar {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.dropdown-menu {
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+
+    .dropdown-item {
+        border-radius: $border-radius-sm;
+        padding: 0.5rem 0.75rem;
+        margin: 0.0625rem 0.375rem;
+        width: auto;
+
+        &:active {
+            color: $teal-hover;
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Tables
+// ----------------------------------------------------------------------------
+
+.table > thead th {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom-color: var(--color-border);
+}
+
+// ----------------------------------------------------------------------------
+// Badges & status (color is paired with text/icon, never color alone)
+// ----------------------------------------------------------------------------
+
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+
+    &.bg-light,
+    &.bg-secondary {
+        color: $gray-700 !important;
+    }
+}
+
+// Soft status pills for appointment states etc.
+.badge-soft-success {
+    color: #14532d;
+    background-color: rgba($green, 0.14);
+}
+
+.badge-soft-warning {
+    color: #7c2d12;
+    background-color: rgba($orange, 0.16);
+}
+
+.badge-soft-danger {
+    color: #7f1d1d;
+    background-color: rgba($danger, 0.14);
+}
+
+.badge-soft-info {
+    color: #0c4a6e;
+    background-color: rgba($blue, 0.14);
+}
+
+// ----------------------------------------------------------------------------
+// Alerts
+// ----------------------------------------------------------------------------
+
+.alert-primary {
+    color: $teal-hover;
+    background-color: rgba($teal, 0.08);
+    border-color: rgba($teal, 0.2);
+}
+
+.alert-success {
+    color: #14532d;
+    background-color: rgba($green, 0.09);
+    border-color: rgba($green, 0.22);
+}
+
+.alert-danger {
+    color: #7f1d1d;
+    background-color: rgba($danger, 0.08);
+    border-color: rgba($danger, 0.22);
+}
+
+.alert-warning {
+    color: #7c2d12;
+    background-color: rgba($orange, 0.1);
+    border-color: rgba($orange, 0.24);
+}
+
+.alert-info {
+    color: #0c4a6e;
+    background-color: rgba($blue, 0.09);
+    border-color: rgba($blue, 0.22);
+}
+
+// ----------------------------------------------------------------------------
+// Nav tabs / pills
+// ----------------------------------------------------------------------------
+
+.nav-tabs .nav-link {
+    border-radius: $border-radius-sm $border-radius-sm 0 0;
+    color: var(--color-muted);
+
+    &:hover {
+        border-color: transparent;
+        color: $gray-900;
+    }
+
+    &.active {
+        color: $teal-hover;
+        font-weight: 600;
+    }
+}
+
+.nav-pills .nav-link {
+    color: var(--color-muted);
+
+    &:hover:not(.active) {
+        background-color: rgba($teal, 0.08);
+        color: $gray-900;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Loading state helper
+// ----------------------------------------------------------------------------
+
+.is-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.65;
+}
+
+// ----------------------------------------------------------------------------
+// Minimal scrollbars & selection
+// ----------------------------------------------------------------------------
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $gray-300;
+    border-radius: 6px;
+    border: 2px solid var(--color-background);
+
+    &:hover {
+        background: $gray-400;
+    }
+}
+
+::selection {
+    background: rgba($teal, 0.18);
+    color: $gray-900;
+}

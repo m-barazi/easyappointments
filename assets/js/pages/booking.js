@@ -101,6 +101,9 @@ App.Pages.Booking = (function () {
 
         manageMode = vars('manage_mode');
 
+        // Expose the required state to assistive technology.
+        $('#wizard-frame-3 .required, #wizard-frame-4 .required').attr('aria-required', 'true');
+
         // Initialize page's components (tooltips, date pickers etc).
         tippy('[data-tippy-content]');
 
@@ -237,6 +240,8 @@ App.Pages.Booking = (function () {
 
                 $('.active-step').removeClass('active-step');
                 $('#step-2').addClass('active-step');
+                $('.book-step').removeAttr('aria-current');
+                $('#step-2').attr('aria-current', 'step');
                 $('#wizard-frame-1').hide();
                 $('#wizard-frame-2').fadeIn();
 
@@ -469,6 +474,8 @@ App.Pages.Booking = (function () {
             // Update step indicator immediately
             $('.active-step').removeClass('active-step');
             $('#step-' + nextTabIndex).addClass('active-step');
+            $('.book-step').removeAttr('aria-current');
+            $('#step-' + nextTabIndex).attr('aria-current', 'step');
 
             $target
                 .parents()
@@ -496,6 +503,8 @@ App.Pages.Booking = (function () {
             // Update step indicator immediately
             $('.active-step').removeClass('active-step');
             $('#step-' + prevTabIndex).addClass('active-step');
+            $('.book-step').removeAttr('aria-current');
+            $('#step-' + prevTabIndex).attr('aria-current', 'step');
 
             $(event.currentTarget)
                 .parents()
@@ -511,8 +520,8 @@ App.Pages.Booking = (function () {
          * Triggered whenever the user clicks on an available hour for his appointment.
          */
         $availableHours.on('click', '.available-hour', (event) => {
-            $availableHours.find('.selected-hour').removeClass('selected-hour');
-            $(event.target).addClass('selected-hour');
+            $availableHours.find('.selected-hour').removeClass('selected-hour').attr('aria-pressed', 'false');
+            $(event.currentTarget).addClass('selected-hour').attr('aria-pressed', 'true');
             App.Pages.Booking.updateConfirmFrame();
         });
 
@@ -644,28 +653,46 @@ App.Pages.Booking = (function () {
      * @return {Boolean} Returns the validation result.
      */
     function validateCustomerForm() {
-        $('#wizard-frame-3 .is-invalid').removeClass('is-invalid');
+        const $formMessage = $('#form-message');
+
+        $('#wizard-frame-3 .is-invalid').removeClass('is-invalid').removeAttr('aria-invalid');
         $('#wizard-frame-3 label.text-danger').removeClass('text-danger');
+        $formMessage.addClass('d-none').text('');
+
+        const showError = ($field, message) => {
+            if ($field) {
+                $field.addClass('is-invalid').attr('aria-invalid', 'true');
+            }
+
+            $formMessage.removeClass('d-none').text(message);
+
+            // Move focus to the first offending field for keyboard/screen-reader users.
+            if ($field) {
+                $field.trigger('focus');
+            }
+        };
 
         // Validate required fields.
-        let missingRequiredField = false;
+        let $firstMissing = null;
 
         $('.required').each((index, requiredField) => {
             if (!$(requiredField).val()) {
-                $(requiredField).addClass('is-invalid');
-                missingRequiredField = true;
+                $(requiredField).addClass('is-invalid').attr('aria-invalid', 'true');
+
+                if (!$firstMissing) {
+                    $firstMissing = $(requiredField);
+                }
             }
         });
 
-        if (missingRequiredField) {
-            $('#form-message').text(lang('fields_are_required'));
+        if ($firstMissing) {
+            showError($firstMissing, lang('fields_are_required'));
             return false;
         }
 
         // Validate email address.
         if ($email.val() && !App.Utils.Validation.email($email.val())) {
-            $email.addClass('is-invalid');
-            $('#form-message').text(lang('invalid_email'));
+            showError($email, lang('invalid_email'));
             return false;
         }
 
@@ -673,8 +700,7 @@ App.Pages.Booking = (function () {
         const phoneNumber = $phoneNumber.val();
 
         if (phoneNumber && !App.Utils.Validation.phone(phoneNumber)) {
-            $phoneNumber.addClass('is-invalid');
-            $('#form-message').text(lang('invalid_phone'));
+            showError($phoneNumber, lang('invalid_phone'));
             return false;
         }
 
@@ -835,6 +861,9 @@ App.Pages.Booking = (function () {
         data.manage_mode = Number(manageMode);
 
         if (manageMode) {
+            // The secret appointment hash is what authorizes an update on the server side; the ids
+            // are kept for backwards compatibility but are re-derived from the hash server-side.
+            data.appointment.hash = vars('appointment_data').hash;
             data.appointment.id = vars('appointment_data').id;
             data.customer.id = vars('customer_data').id;
         }

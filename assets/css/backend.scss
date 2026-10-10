@@ -626,3 +626,95 @@ body .modal.full-screen .modal-push {
         min-width: 0;
     }
 }
+
+/* ============================================================================
+   Premium dashboard polish (Phase 4)
+   CSS only - no change to markup, controllers, permissions or JS behaviour.
+   Uses Bootstrap CSS variables so it works across all themes; the premium
+   theme's tokens map onto these.
+   ============================================================================ */
+
+/* Surface cards for the master (list) and detail panes */
+.backend-page .filter-records,
+.backend-page .record-details {
+    background-color: var(--bs-body-bg, #fff);
+    border: 1px solid var(--bs-border-color, #e2e8f0);
+    border-radius: var(--bs-border-radius-lg, 0.875rem);
+    box-shadow: var(--shadow-card, 0 4px 20px rgb(15 23 42 / 0.05));
+    padding: 1.25rem;
+}
+
+/* Record list entries: clear, card-like rows with obvious hover + selected */
+.backend-page .filter-records .results .entry {
+    padding: 0.625rem 0.75rem;
+    border-radius: var(--bs-border-radius, 0.625rem);
+    transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.backend-page .filter-records .results .entry:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.06);
+}
+
+.backend-page .filter-records .results .entry:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+}
+
+/* Prominent selected state (also conveyed by the left accent bar, not colour alone) */
+.backend-page .filter-records .results .entry.selected {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    box-shadow: inset 3px 0 0 0 var(--bs-primary);
+    font-weight: 500;
+}
+
+/* Hide the heavy divider between entries now that rows have their own spacing */
+.backend-page .filter-records .results hr {
+    display: none;
+}
+
+.backend-page .filter-records .results .entry + .entry {
+    margin-top: 0.25rem;
+}
+
+/* Styled empty state for record lists */
+.backend-page .filter-records .results > em {
+    display: block;
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--bs-secondary-color, #64748b);
+    font-style: normal;
+}
+
+/* Section headings in backend pages */
+.backend-page .record-details h4,
+.backend-page .filter-records h4 {
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+/* Keep wide data tables usable on small screens by allowing horizontal scroll
+   inside their container instead of breaking the page layout. */
+.backend-page .table-wrapper,
+.backend-page .results {
+    -webkit-overflow-scrolling: touch;
+}
+
+.backend-page table.table {
+    margin-bottom: 0;
+}
+
+/* On small screens let the two CRUD panes breathe a bit less */
+@media (max-width: 575.98px) {
+    .backend-page .filter-records,
+    .backend-page .record-details {
+        padding: 1rem;
+    }
+}
+
+/* The customer detail "appointments" panel had a hard 330px cap; let it use
+   the full width of its column so it is readable on larger screens. */
+.backend-page #customer-appointments {
+    max-width: 100% !important;
+}

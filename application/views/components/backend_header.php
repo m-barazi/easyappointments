@@ -12,8 +12,10 @@
         <img src="<?= base_url(
             'assets/img/logo.png',
         ) ?>" alt="logo" class="float-start me-2" style="width: 45px; height: 45px;">
-        <h6 class="mb-1 mt-1 fw-bold text-white" style="font-size: 15px;">EASY!APPOINTMENTS</h6>
-        <small class="d-block text-white-50" style="font-size: 12px;">Online Appointment Scheduler</small>
+        <h6 class="mb-1 mt-1 fw-bold text-white" style="font-size: 15px;"><?= e(brand_name()) ?></h6>
+        <?php if (brand_tagline()): ?>
+            <small class="d-block text-white-50" style="font-size: 12px;"><?= e(brand_tagline()) ?></small>
+        <?php endif; ?>
     </div>
 
     <button type="button" class="navbar-toggler me-1" data-bs-toggle="collapse" data-bs-target="#header-menu">
@@ -108,11 +110,13 @@
                         <i class="fas fa-info-circle me-2"></i>
                         <?= lang('about') ?>
                     </a>
+                    <?php if (brand_show_vendor_links()): ?>
                     <a class="dropdown-item text-danger" href="https://easyappointments.org/premium" target="_blank">
                         <i class="fas fa-crown text-warning me-2"></i>
                         Premium
                     </a>
                     <div class="dropdown-divider"></div>
+                    <?php endif; ?>
                     <a class="dropdown-item" href="<?= site_url('booking') ?>" target="_blank">
                         <i class="fas fa-external-link me-2"></i>
                         <?= lang('booking') ?>
