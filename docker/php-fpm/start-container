@@ -2,8 +2,11 @@
 
 REPO_URL="https://github.com/m-barazi/easyappointments.git"
 
-if [ -z "$(ls -A /var/www/html 2>/dev/null)" ]; then
-    echo "➜ Project directory is empty, cloning repository"
+# If the web root is not a git checkout of this repo (e.g. Hostinger only cloned
+# docker-compose.yml into it), remove any stray files and clone the app source.
+if [ ! -d ".git" ] || [ "$(git remote get-url origin 2>/dev/null)" != "$REPO_URL" ]; then
+    echo "➜ App source missing, preparing /var/www/html and cloning repository"
+    rm -rf .[!.]* ..?* *
     git clone "$REPO_URL" .
 fi
 
