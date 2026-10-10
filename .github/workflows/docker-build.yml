@@ -30,6 +30,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set short SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Build and push PHP-FPM image
         uses: docker/build-push-action@v6
         with:
@@ -38,6 +42,7 @@ jobs:
           tags: |
             ghcr.io/m-barazi/easyappointments-php-fpm:latest
             ghcr.io/m-barazi/easyappointments-php-fpm:${{ github.sha }}
+            ghcr.io/m-barazi/easyappointments-php-fpm:${{ steps.vars.outputs.sha_short }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -49,5 +54,6 @@ jobs:
           tags: |
             ghcr.io/m-barazi/easyappointments-nginx:latest
             ghcr.io/m-barazi/easyappointments-nginx:${{ github.sha }}
+            ghcr.io/m-barazi/easyappointments-nginx:${{ steps.vars.outputs.sha_short }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
