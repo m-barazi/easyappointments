@@ -1,12 +1,12 @@
 services:
   php-fpm:
-    image: 'ghcr.io/m-barazi/easyappointments-php-fpm:d932c780af01e5f879c9ac080fab0216c77b739c'
+    image: 'ghcr.io/m-barazi/easyappointments-php-fpm:3b8e0ea1'
     working_dir: /var/www/html
     extra_hosts:
       - host.docker.internal:host-gateway
 
   nginx:
-    image: 'ghcr.io/m-barazi/easyappointments-nginx:d932c780af01e5f879c9ac080fab0216c77b739c'
+    image: 'ghcr.io/m-barazi/easyappointments-nginx:3b8e0ea1'
     working_dir: /var/www/html
     ports:
       - '${NGINX_PORT:-8082}:80'
