@@ -16,6 +16,49 @@ git config core.fileMode false || true
 echo "➜ Set Correct Permissions"
 chmod -R 777 storage
 
+echo "➜ Prepare Configuration"
+if [ ! -f "config.php" ]; then
+    cat > config.php <<EOF
+<?php
+/* ----------------------------------------------------------------------------
+ * Easy!Appointments - Online Appointment Scheduler
+ *
+ * @package     EasyAppointments
+ * @author      A.Tselegidis <alextselegidis@gmail.com>
+ * @copyright   Copyright (c) Alex Tselegidis
+ * @license     https://opensource.org/licenses/GPL-3.0 - GPLv3
+ * @link        https://easyappointments.org
+ * @since       v1.0.0
+ * ---------------------------------------------------------------------------- */
+
+/**
+ * Easy!Appointments Configuration File
+ *
+ * This file is generated automatically on first container start. Override
+ * values by setting the corresponding environment variables.
+ */
+class Config
+{
+    // ------------------------------------------------------------------------
+    // GENERAL SETTINGS
+    // ------------------------------------------------------------------------
+
+    const BASE_URL = '${BASE_URL:-http://localhost}';
+    const LANGUAGE = '${LANGUAGE:-english}';
+    const DEBUG_MODE = ${DEBUG_MODE:-false};
+
+    // ------------------------------------------------------------------------
+    // DATABASE SETTINGS
+    // ------------------------------------------------------------------------
+
+    const DB_HOST = '${DB_HOST:-mysql}';
+    const DB_NAME = '${DB_NAME:-easyappointments}';
+    const DB_USERNAME = '${DB_USERNAME:-user}';
+    const DB_PASSWORD = '${DB_PASSWORD:-password}';
+}
+EOF
+fi
+
 echo "➜ Install Composer Dependencies"
 [[ -d vendor ]] || composer install --no-dev --optimize-autoloader
 

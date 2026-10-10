@@ -4,6 +4,12 @@ services:
     working_dir: /var/www/html
     volumes:
       - app-source:/var/www/html
+    environment:
+      - BASE_URL=http://76.13.2.12:8082
+      - DB_HOST=mysql
+      - DB_NAME=easyappointments
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
     extra_hosts:
       - host.docker.internal:host-gateway
 
