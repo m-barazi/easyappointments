@@ -35,7 +35,9 @@ jobs:
         with:
           context: docker/php-fpm
           push: true
-          tags: ghcr.io/m-barazi/easyappointments-php-fpm:latest
+          tags: |
+            ghcr.io/m-barazi/easyappointments-php-fpm:latest
+            ghcr.io/m-barazi/easyappointments-php-fpm:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -44,6 +46,8 @@ jobs:
         with:
           context: docker/nginx
           push: true
-          tags: ghcr.io/m-barazi/easyappointments-nginx:latest
+          tags: |
+            ghcr.io/m-barazi/easyappointments-nginx:latest
+            ghcr.io/m-barazi/easyappointments-nginx:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

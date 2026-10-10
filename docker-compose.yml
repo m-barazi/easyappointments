@@ -1,6 +1,6 @@
 services:
   php-fpm:
-    image: 'ghcr.io/m-barazi/easyappointments-php-fpm:latest'
+    image: 'ghcr.io/m-barazi/easyappointments-php-fpm:ca78c470'
     working_dir: /var/www/html
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -8,7 +8,7 @@ services:
       - '.:/var/www/html'
 
   nginx:
-    image: 'ghcr.io/m-barazi/easyappointments-nginx:latest'
+    image: 'ghcr.io/m-barazi/easyappointments-nginx:ca78c470'
     working_dir: /var/www/html
     volumes:
       - '.:/var/www/html'
